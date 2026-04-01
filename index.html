@@ -7,17 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5f0e8;
-    --surface: #ffffff;
-    --surface2: #f0ebe0;
-    --ink: #1a1612;
-    --ink2: #6b6358;
-    --accent: #c84b2f;
-    --accent2: #2f6bc8;
-    --gold: #c8941a;
-    --border: #ddd8cc;
-    --success: #2a7a4b;
-    --radius: 16px;
+    --bg: #f5f0e8; --surface: #ffffff; --surface2: #f0ebe0;
+    --ink: #1a1612; --ink2: #6b6358; --accent: #c84b2f;
+    --accent2: #2f6bc8; --gold: #c8941a; --border: #ddd8cc;
+    --success: #2a7a4b; --radius: 16px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--bg); color: var(--ink); font-family: 'DM Sans','Noto Sans JP',sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
@@ -46,10 +39,10 @@
   .card-number { font-size: 0.7rem; color: rgba(255,255,255,0.5); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
   .card-topic { font-size: 0.7rem; color: var(--gold); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
   .card-stats { display: flex; gap: 6px; align-items: center; }
-  .stat-pill { display: flex; align-items: center; gap: 4px; font-size: 0.7rem; font-weight: 600; padding: 3px 8px; border-radius: 100px; }
+  .stat-pill { font-size: 0.7rem; font-weight: 600; padding: 3px 8px; border-radius: 100px; }
   .stat-pill.ok { background: rgba(42,122,75,0.25); color: #7eeaaa; }
   .stat-pill.ng { background: rgba(200,75,47,0.25); color: #ffaa99; }
-  .mastery-badge { font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 100px; background: rgba(200,148,26,0.3); color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; }
+  .mastery-badge { font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 100px; background: rgba(200,148,26,0.3); color: var(--gold); text-transform: uppercase; }
   .card-body { padding: 28px 24px; }
   .card-theme { font-family: 'DM Serif Display',serif; font-size: 1.5rem; color: var(--ink); line-height: 1.4; margin-bottom: 12px; }
   .card-question { font-size: 0.9rem; color: var(--ink2); line-height: 1.6; padding: 12px 16px; background: var(--surface2); border-radius: 10px; border-left: 3px solid var(--accent); margin-bottom: 20px; }
@@ -66,7 +59,7 @@
   .judge-section { border-top: 1px solid var(--border); padding: 20px 24px 24px; display: flex; gap: 10px; animation: fadeIn 0.3s ease; }
   .btn-ng { flex: 1; padding: 14px; background: var(--surface); color: var(--accent); border: 1.5px solid var(--accent); border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans',sans-serif; transition: all 0.2s; }
   .btn-ng:hover { background: #fde8e4; }
-  .btn-ok { flex: 1; padding: 14px; background: var(--success); color: white; border: none; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans',sans-serif; transition: all 0.2s; }
+  .btn-ok { flex: 1; padding: 14px; background: var(--success); color: white; border: none; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans',sans-serif; }
   .btn-ok:hover { background: #235f3b; }
   .nav-actions { display: flex; gap: 10px; }
   .btn-nav { flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans',sans-serif; }
@@ -74,6 +67,8 @@
   .btn-nav:disabled { opacity: 0.4; cursor: default; }
   .btn-nav.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
   .btn-nav.primary:hover { background: #2d2820; }
+
+  /* Test */
   .test-intro { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 28px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
   .test-intro h2 { font-family: 'DM Serif Display',serif; font-size: 1.8rem; margin-bottom: 12px; }
   .test-intro p { color: var(--ink2); font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; }
@@ -83,20 +78,36 @@
   .test-stat-label { font-size: 0.75rem; color: var(--ink2); }
   .btn-start-test { padding: 14px 40px; background: var(--accent); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans',sans-serif; transition: all 0.2s; }
   .btn-start-test:hover { background: #b03d23; }
+
+  /* Test card */
   .test-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
   .test-card-header { background: var(--accent2); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
   .test-card-num { font-size: 0.7rem; color: rgba(255,255,255,0.7); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
   .test-card-body { padding: 28px 24px; }
-  .test-theme { font-family: 'DM Serif Display',serif; font-size: 1.4rem; margin-bottom: 12px; }
-  .test-question { font-size: 0.9rem; color: var(--ink2); line-height: 1.6; padding: 12px 16px; background: var(--surface2); border-radius: 10px; border-left: 3px solid var(--accent2); margin-bottom: 20px; }
-  .test-reveal-btn { width: 100%; padding: 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; color: var(--ink2); cursor: pointer; font-family: 'DM Sans',sans-serif; transition: all 0.2s; text-align: center; }
-  .test-reveal-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* Countdown */
+  .countdown-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 20px; }
+  .countdown-num { font-family: 'DM Serif Display',serif; font-size: 3rem; color: var(--accent); line-height: 1; transition: color 0.3s; }
+  .countdown-num.urgent { color: var(--accent); animation: pulse 0.5s infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .countdown-bar-wrap { width: 100%; height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .countdown-bar { height: 100%; background: var(--accent2); border-radius: 4px; transition: width 1s linear, background 0.3s; }
+  .countdown-bar.urgent { background: var(--accent); }
+
+  /* Japanese prompt (test) */
+  .test-ja-prompt { font-family: 'DM Serif Display',serif; font-size: 1.5rem; color: var(--ink); line-height: 1.5; text-align: center; padding: 24px 20px; }
+
+  .btn-check-answer { width: 100%; padding: 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; color: var(--ink); cursor: pointer; font-family: 'DM Sans',sans-serif; font-weight: 500; transition: all 0.2s; margin-top: 8px; }
+  .btn-check-answer:hover { border-color: var(--accent2); color: var(--accent2); }
+
   .test-answer-reveal { padding: 20px; background: var(--surface2); border-radius: 10px; animation: fadeIn 0.3s ease; margin-bottom: 16px; }
   .test-chunk { font-family: 'DM Serif Display',serif; font-size: 1.3rem; color: var(--accent); margin-bottom: 8px; }
-  .test-example { font-size: 0.85rem; color: var(--ink2); font-style: italic; line-height: 1.6; }
+  .test-example { font-size: 0.9rem; color: var(--ink); font-style: italic; line-height: 1.6; font-family: 'DM Serif Display',serif; }
   .test-judge { display: flex; gap: 10px; }
-  .btn-correct { flex: 1; padding: 12px; background: var(--success); color: white; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans',sans-serif; }
-  .btn-wrong { flex: 1; padding: 12px; background: var(--surface); color: var(--accent); border: 1px solid var(--accent); border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans',sans-serif; }
+  .btn-correct { flex: 1; padding: 14px; background: var(--success); color: white; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans',sans-serif; }
+  .btn-wrong { flex: 1; padding: 14px; background: var(--surface); color: var(--accent); border: 1px solid var(--accent); border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans',sans-serif; }
+
+  /* Result */
   .result-screen { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 28px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); animation: fadeIn 0.4s ease; }
   .result-icon { font-size: 3rem; margin-bottom: 16px; }
   .result-title { font-family: 'DM Serif Display',serif; font-size: 2rem; margin-bottom: 8px; }
@@ -107,7 +118,6 @@
   .result-pass.pass { background: #d4f0e0; color: var(--success); }
   .result-pass.fail { background: #fde8e4; color: var(--accent); }
   .result-actions { display: flex; flex-direction: column; gap: 10px; }
-  .hidden { display: none !important; }
 </style>
 </head>
 <body>
@@ -122,61 +132,62 @@
 <main id="main-content"></main>
 <script>
 const UNITS=[{id:1,title:'Unit 1',chunks:[
-{id:1,topic:'意見',theme:'自分の意見を言う時',question:'釣りは楽しいと思う、どう言う？',chunk:'I think...',example:'I think fishing is fun.'},
-{id:2,topic:'意見',theme:'強く意見を言う時',question:'家族は大切だと強く思う、どう言う？',chunk:'I believe...',example:'I believe family is the most important thing.'},
-{id:3,topic:'好み',theme:'好きなものを言う時',question:'釣りが好きだと言いたい、どう言う？',chunk:'I like...',example:'I like fishing.'},
-{id:4,topic:'好み',theme:'好きな理由を言う時',question:'釣りが好きな理由を言いたい、どう言う？',chunk:'I like...because...',example:'I like fishing because it helps me relax.'},
-{id:5,topic:'意志',theme:'したいことを言う時',question:'旅行したいと言いたい、どう言う？',chunk:'I want to...',example:'I want to travel with my family.'},
-{id:6,topic:'説明',theme:'理由を説明する時',question:'なぜ家族時間が大切か説明したい、どう言う？',chunk:'This is because...',example:'This is because family bonds are very important.'},
-{id:7,topic:'説明',theme:'例を挙げる時',question:'具体例を出したい、どう言う？',chunk:'For example,...',example:'For example, I go fishing every weekend.'},
-{id:8,topic:'依頼',theme:'相手に依頼する時',question:'手伝ってほしいと言いたい、どう言う？',chunk:'Could you...?',example:'Could you help me with this?'},
-{id:9,topic:'依頼',theme:'許可を求める時',question:'やっていいか丁寧に聞きたい、どう言う？',chunk:'Would it be possible for me to...?',example:'Would it be possible for me to take a look at this?'},
-{id:10,topic:'予定',theme:'予定を言う時',question:'カルイザワに行く予定と言いたい、どう言う？',chunk:'I am planning to...',example:'I am planning to visit Karuizawa.'},
-{id:11,topic:'現状',theme:'今やっていることを言う時',question:'サイトを作っていると言いたい、どう言う？',chunk:'I am working on...',example:'I am working on a new website.'},
-{id:12,topic:'経験',theme:'経験を言う時',question:'釣りをしたことがあると言いたい、どう言う？',chunk:'I have...before.',example:'I have gone fishing in Oita before.'},
-{id:13,topic:'経験',theme:'したことがない時',question:'その場所に行ったことがないと言いたい、どう言う？',chunk:'I have never...',example:'I have never been to Tokyo.'},
-{id:14,topic:'提案',theme:'提案する時',question:'一緒に行こうと提案したい、どう言う？',chunk:'I suggest that we...',example:'I suggest that we go fishing together.'},
-{id:15,topic:'確認',theme:'相手の意見を聞く時',question:'どう思うか聞きたい、どう言う？',chunk:'What do you think about...?',example:'What do you think about this idea?'},
-{id:16,topic:'意見',theme:'賛成する時',question:'相手の意見に賛成したい、どう言う？',chunk:'I agree with...',example:'I agree with your opinion.'},
-{id:17,topic:'意見',theme:'反対する時',question:'相手の意見に反対したい、どう言う？',chunk:'I disagree with...',example:'I disagree with that idea.'},
-{id:18,topic:'構成',theme:'一方でと言う時',question:'反対の面も言いたい、どう言う？',chunk:'On the other hand,...',example:'On the other hand, it can be difficult.'},
-{id:19,topic:'構成',theme:'まとめる時',question:'結論を言いたい、どう言う？',chunk:'For these reasons,...',example:'For these reasons, I think family time is important.'},
-{id:20,topic:'社会',theme:'最近の傾向を言う時',question:'最近〜が増えていると言いたい、どう言う？',chunk:'In recent years,...',example:'In recent years, more people enjoy outdoor activities.'},
-{id:21,topic:'社会',theme:'数が増えていると言う時',question:'釣り人が増えていると言いたい、どう言う？',chunk:'The number of...is increasing.',example:'The number of people who enjoy fishing is increasing.'},
-{id:22,topic:'社会',theme:'数が減っていると言う時',question:'子供の数が減っていると言いたい、どう言う？',chunk:'The number of...is decreasing.',example:'The number of children is decreasing in Japan.'},
-{id:23,topic:'意見',theme:'大切だと伝える時',question:'家族時間が大切だと伝えたい、どう言う？',chunk:'I believe it is important to...',example:'I believe it is important to spend time with family.'},
-{id:24,topic:'意見',theme:'〜にとって大切だと伝える時',question:'子供にとって大切だと伝えたい、どう言う？',chunk:'I believe it is important for...to...',example:'I believe it is important for children to spend time with family.'},
-{id:25,topic:'説明',theme:'難しいと言う時',question:'子育ては難しいと言いたい、どう言う？',chunk:'It is not easy to...',example:'It is not easy to raise children.'},
-{id:26,topic:'変化',theme:'可能になったと言う時',question:'簡単にサイトが作れるようになったと言いたい、どう言う？',chunk:'It has become possible to...',example:'It has become possible to build websites easily.'},
-{id:27,topic:'比較',theme:'メリットを言う時',question:'釣りのメリットを言いたい、どう言う？',chunk:'One of the advantages of...is...',example:'One of the advantages of fishing is that it reduces stress.'},
-{id:28,topic:'比較',theme:'デメリットを言う時',question:'問題点を言いたい、どう言う？',chunk:'One of the disadvantages of...is...',example:'One of the disadvantages of remote work is feeling lonely.'},
-{id:29,topic:'比較',theme:'比較する時',question:'都会と田舎を比べたい、どう言う？',chunk:'Compared to..., ...is more...',example:'Compared to cities, rural areas are more peaceful.'},
-{id:30,topic:'提案',theme:'おすすめする時',question:'釣りをおすすめしたい、どう言う？',chunk:'I would recommend...because...',example:'I would recommend fishing because it is relaxing.'},
-{id:31,topic:'経験',theme:'経験から学んだ時',question:'旅行から学んだことを言いたい、どう言う？',chunk:'Through this experience, I learned that...',example:'Through this experience, I learned that travel broadens your mind.'},
-{id:32,topic:'説明',theme:'〜が好きな人に向けて言う時',question:'アウトドアが好きな人に向けて言いたい、どう言う？',chunk:'For people who like...,...',example:'For people who like nature, fishing is a great hobby.'},
-{id:33,topic:'会話',theme:'考える時間が欲しい時',question:'すぐに答えられない、どう言う？',chunk:'Let me think about that for a moment.',example:'Let me think about that for a moment.'},
-{id:34,topic:'会話',theme:'聞き返す時',question:'もう一度言ってほしい、どう言う？',chunk:'Could you repeat that?',example:'I beg your pardon? Could you repeat that?'},
-{id:35,topic:'会話',theme:'確認する時',question:'相手の意図を確認したい、どう言う？',chunk:'Do you mean...?',example:'Do you mean we should start now?'},
-{id:36,topic:'趣味',theme:'自分の趣味を言う時',question:'趣味を聞かれた、どう言う？',chunk:'One of my hobbies is...',example:'One of my hobbies is fishing in the rivers near Oita.'},
-{id:37,topic:'将来',theme:'将来の話をする時',question:'将来〜したいと言いたい、どう言う？',chunk:'In the future, I would like to...',example:'In the future, I would like to travel abroad with my family.'},
-{id:38,topic:'現状',theme:'現状を説明する時',question:'今の状況を説明したい、どう言う？',chunk:'At the moment,...',example:'At the moment, I am developing a new website.'},
-{id:39,topic:'変化',theme:'変化を言う時',question:'技術が急速に変化していると言いたい、どう言う？',chunk:'...is changing rapidly.',example:'Technology is changing rapidly these days.'},
-{id:40,topic:'社会',theme:'社会問題を言う時',question:'社会問題について言いたい、どう言う？',chunk:'One of the biggest problems is...',example:'One of the biggest problems is the lack of work-life balance.'},
-{id:41,topic:'影響',theme:'影響を言う時',question:'〜に影響を与えると言いたい、どう言う？',chunk:'...has a big impact on...',example:'The internet has a big impact on our daily lives.'},
-{id:42,topic:'社会',theme:'環境を守ると言う時',question:'自然を守ることが大切と言いたい、どう言う？',chunk:'It is important to protect...',example:'It is important to protect the natural environment.'},
-{id:43,topic:'理由',theme:'〜のおかげでと言う時',question:'技術のおかげで便利になったと言いたい、どう言う？',chunk:'Thanks to...,...',example:'Thanks to technology, we can work from anywhere.'},
-{id:44,topic:'逆接',theme:'〜にもかかわらずと言う時',question:'忙しいにもかかわらず続けていると言いたい、どう言う？',chunk:'Despite...,...',example:'Despite being busy, I try to go fishing every month.'},
-{id:45,topic:'条件',theme:'条件を言う時',question:'もし〜ならと言いたい、どう言う？',chunk:'If...,...',example:'If I have time, I want to go fishing this weekend.'},
-{id:46,topic:'会話',theme:'許可を与える時',question:'いいよと丁寧に言いたい、どう言う？',chunk:'Feel free to...',example:'Feel free to ask me any questions.'},
-{id:47,topic:'感情',theme:'驚きを表す時',question:'驚いたと言いたい、どう言う？',chunk:'I was surprised to...',example:'I was surprised to hear that news.'},
-{id:48,topic:'感情',theme:'心配を言う時',question:'心配していると言いたい、どう言う？',chunk:'I am worried about...',example:"I am worried about my child's future."},
-{id:49,topic:'感情',theme:'喜びを言う時',question:'嬉しいと言いたい、どう言う？',chunk:'I am happy to...',example:'I am happy to spend time with my family.'},
-{id:50,topic:'経験',theme:'困難を乗り越えた時',question:'大変だったけど頑張ったと言いたい、どう言う？',chunk:'It was hard, but...',example:'It was hard, but I managed to finish the project.'},
+{id:1,topic:'意見',theme:'自分の意見を言う時',question:'釣りは楽しいと思う、どう言う？',chunk:'I think...',example:'I think fishing is fun.',exampleJa:'釣りは楽しいと思います。'},
+{id:2,topic:'意見',theme:'強く意見を言う時',question:'家族は大切だと強く思う、どう言う？',chunk:'I believe...',example:'I believe family is the most important thing.',exampleJa:'家族が最も大切なものだと思います。'},
+{id:3,topic:'好み',theme:'好きなものを言う時',question:'釣りが好きだと言いたい、どう言う？',chunk:'I like...',example:'I like fishing.',exampleJa:'私は釣りが好きです。'},
+{id:4,topic:'好み',theme:'好きな理由を言う時',question:'釣りが好きな理由を言いたい、どう言う？',chunk:'I like...because...',example:'I like fishing because it helps me relax.',exampleJa:'釣りはリラックスできるので好きです。'},
+{id:5,topic:'意志',theme:'したいことを言う時',question:'旅行したいと言いたい、どう言う？',chunk:'I want to...',example:'I want to travel with my family.',exampleJa:'家族と旅行したいです。'},
+{id:6,topic:'説明',theme:'理由を説明する時',question:'なぜ家族時間が大切か説明したい、どう言う？',chunk:'This is because...',example:'This is because family bonds are very important.',exampleJa:'なぜなら、家族の絆はとても大切だからです。'},
+{id:7,topic:'説明',theme:'例を挙げる時',question:'具体例を出したい、どう言う？',chunk:'For example,...',example:'For example, I go fishing every weekend.',exampleJa:'例えば、私は毎週末釣りに行きます。'},
+{id:8,topic:'依頼',theme:'相手に依頼する時',question:'手伝ってほしいと言いたい、どう言う？',chunk:'Could you...?',example:'Could you help me with this?',exampleJa:'これを手伝っていただけますか？'},
+{id:9,topic:'依頼',theme:'許可を求める時',question:'やっていいか丁寧に聞きたい、どう言う？',chunk:'Would it be possible for me to...?',example:'Would it be possible for me to take a look at this?',exampleJa:'これを見せていただくことは可能でしょうか？'},
+{id:10,topic:'予定',theme:'予定を言う時',question:'カルイザワに行く予定と言いたい、どう言う？',chunk:'I am planning to...',example:'I am planning to visit Karuizawa.',exampleJa:'軽井沢を訪れる予定です。'},
+{id:11,topic:'現状',theme:'今やっていることを言う時',question:'サイトを作っていると言いたい、どう言う？',chunk:'I am working on...',example:'I am working on a new website.',exampleJa:'新しいウェブサイトに取り組んでいます。'},
+{id:12,topic:'経験',theme:'経験を言う時',question:'釣りをしたことがあると言いたい、どう言う？',chunk:'I have...before.',example:'I have gone fishing in Oita before.',exampleJa:'以前、大分で釣りをしたことがあります。'},
+{id:13,topic:'経験',theme:'したことがない時',question:'その場所に行ったことがないと言いたい、どう言う？',chunk:'I have never...',example:'I have never been to Tokyo.',exampleJa:'東京に行ったことがありません。'},
+{id:14,topic:'提案',theme:'提案する時',question:'一緒に行こうと提案したい、どう言う？',chunk:'I suggest that we...',example:'I suggest that we go fishing together.',exampleJa:'一緒に釣りに行くことを提案します。'},
+{id:15,topic:'確認',theme:'相手の意見を聞く時',question:'どう思うか聞きたい、どう言う？',chunk:'What do you think about...?',example:'What do you think about this idea?',exampleJa:'このアイデアについてどう思いますか？'},
+{id:16,topic:'意見',theme:'賛成する時',question:'相手の意見に賛成したい、どう言う？',chunk:'I agree with...',example:'I agree with your opinion.',exampleJa:'あなたの意見に賛成です。'},
+{id:17,topic:'意見',theme:'反対する時',question:'相手の意見に反対したい、どう言う？',chunk:'I disagree with...',example:'I disagree with that idea.',exampleJa:'そのアイデアには反対です。'},
+{id:18,topic:'構成',theme:'一方でと言う時',question:'反対の面も言いたい、どう言う？',chunk:'On the other hand,...',example:'On the other hand, it can be difficult.',exampleJa:'一方で、それは難しいこともあります。'},
+{id:19,topic:'構成',theme:'まとめる時',question:'結論を言いたい、どう言う？',chunk:'For these reasons,...',example:'For these reasons, I think family time is important.',exampleJa:'これらの理由から、家族との時間は大切だと思います。'},
+{id:20,topic:'社会',theme:'最近の傾向を言う時',question:'最近〜が増えていると言いたい、どう言う？',chunk:'In recent years,...',example:'In recent years, more people enjoy outdoor activities.',exampleJa:'近年、アウトドア活動を楽しむ人が増えています。'},
+{id:21,topic:'社会',theme:'数が増えていると言う時',question:'釣り人が増えていると言いたい、どう言う？',chunk:'The number of...is increasing.',example:'The number of people who enjoy fishing is increasing.',exampleJa:'釣りを楽しむ人の数が増えています。'},
+{id:22,topic:'社会',theme:'数が減っていると言う時',question:'子供の数が減っていると言いたい、どう言う？',chunk:'The number of...is decreasing.',example:'The number of children is decreasing in Japan.',exampleJa:'日本では子供の数が減っています。'},
+{id:23,topic:'意見',theme:'大切だと伝える時',question:'家族時間が大切だと伝えたい、どう言う？',chunk:'I believe it is important to...',example:'I believe it is important to spend time with family.',exampleJa:'家族と時間を過ごすことが大切だと思います。'},
+{id:24,topic:'意見',theme:'〜にとって大切だと伝える時',question:'子供にとって大切だと伝えたい、どう言う？',chunk:'I believe it is important for...to...',example:'I believe it is important for children to spend time with family.',exampleJa:'子供にとって家族と時間を過ごすことが大切だと思います。'},
+{id:25,topic:'説明',theme:'難しいと言う時',question:'子育ては難しいと言いたい、どう言う？',chunk:'It is not easy to...',example:'It is not easy to raise children.',exampleJa:'子供を育てることは簡単ではありません。'},
+{id:26,topic:'変化',theme:'可能になったと言う時',question:'簡単にサイトが作れるようになったと言いたい、どう言う？',chunk:'It has become possible to...',example:'It has become possible to build websites easily.',exampleJa:'ウェブサイトを簡単に作ることが可能になりました。'},
+{id:27,topic:'比較',theme:'メリットを言う時',question:'釣りのメリットを言いたい、どう言う？',chunk:'One of the advantages of...is...',example:'One of the advantages of fishing is that it reduces stress.',exampleJa:'釣りの利点の一つはストレスを軽減することです。'},
+{id:28,topic:'比較',theme:'デメリットを言う時',question:'問題点を言いたい、どう言う？',chunk:'One of the disadvantages of...is...',example:'One of the disadvantages of remote work is feeling lonely.',exampleJa:'リモートワークの欠点の一つは孤独を感じることです。'},
+{id:29,topic:'比較',theme:'比較する時',question:'都会と田舎を比べたい、どう言う？',chunk:'Compared to..., ...is more...',example:'Compared to cities, rural areas are more peaceful.',exampleJa:'都市と比べて、農村地域はより穏やかです。'},
+{id:30,topic:'提案',theme:'おすすめする時',question:'釣りをおすすめしたい、どう言う？',chunk:'I would recommend...because...',example:'I would recommend fishing because it is relaxing.',exampleJa:'釣りはリラックスできるのでおすすめします。'},
+{id:31,topic:'経験',theme:'経験から学んだ時',question:'旅行から学んだことを言いたい、どう言う？',chunk:'Through this experience, I learned that...',example:'Through this experience, I learned that travel broadens your mind.',exampleJa:'この経験を通じて、旅行は視野を広げることを学びました。'},
+{id:32,topic:'説明',theme:'〜が好きな人に向けて言う時',question:'アウトドアが好きな人に向けて言いたい、どう言う？',chunk:'For people who like...,...',example:'For people who like nature, fishing is a great hobby.',exampleJa:'自然が好きな人にとって、釣りは素晴らしい趣味です。'},
+{id:33,topic:'会話',theme:'考える時間が欲しい時',question:'すぐに答えられない、どう言う？',chunk:'Let me think about that for a moment.',example:'Let me think about that for a moment.',exampleJa:'少し考えさせてください。'},
+{id:34,topic:'会話',theme:'聞き返す時',question:'もう一度言ってほしい、どう言う？',chunk:'Could you repeat that?',example:'I beg your pardon? Could you repeat that?',exampleJa:'もう一度おっしゃっていただけますか？'},
+{id:35,topic:'会話',theme:'確認する時',question:'相手の意図を確認したい、どう言う？',chunk:'Do you mean...?',example:'Do you mean we should start now?',exampleJa:'今すぐ始めるべきということでしょうか？'},
+{id:36,topic:'趣味',theme:'自分の趣味を言う時',question:'趣味を聞かれた、どう言う？',chunk:'One of my hobbies is...',example:'One of my hobbies is fishing in the rivers near Oita.',exampleJa:'趣味の一つは大分近くの川での釣りです。'},
+{id:37,topic:'将来',theme:'将来の話をする時',question:'将来〜したいと言いたい、どう言う？',chunk:'In the future, I would like to...',example:'In the future, I would like to travel abroad with my family.',exampleJa:'将来は家族と海外旅行をしたいです。'},
+{id:38,topic:'現状',theme:'現状を説明する時',question:'今の状況を説明したい、どう言う？',chunk:'At the moment,...',example:'At the moment, I am developing a new website.',exampleJa:'現在、新しいウェブサイトを開発しています。'},
+{id:39,topic:'変化',theme:'変化を言う時',question:'技術が急速に変化していると言いたい、どう言う？',chunk:'...is changing rapidly.',example:'Technology is changing rapidly these days.',exampleJa:'近年、技術は急速に変化しています。'},
+{id:40,topic:'社会',theme:'社会問題を言う時',question:'社会問題について言いたい、どう言う？',chunk:'One of the biggest problems is...',example:'One of the biggest problems is the lack of work-life balance.',exampleJa:'最大の問題の一つはワークライフバランスの欠如です。'},
+{id:41,topic:'影響',theme:'影響を言う時',question:'〜に影響を与えると言いたい、どう言う？',chunk:'...has a big impact on...',example:'The internet has a big impact on our daily lives.',exampleJa:'インターネットは私たちの日常生活に大きな影響を与えています。'},
+{id:42,topic:'社会',theme:'環境を守ると言う時',question:'自然を守ることが大切と言いたい、どう言う？',chunk:'It is important to protect...',example:'It is important to protect the natural environment.',exampleJa:'自然環境を守ることが大切です。'},
+{id:43,topic:'理由',theme:'〜のおかげでと言う時',question:'技術のおかげで便利になったと言いたい、どう言う？',chunk:'Thanks to...,...',example:'Thanks to technology, we can work from anywhere.',exampleJa:'技術のおかげで、どこからでも働けます。'},
+{id:44,topic:'逆接',theme:'〜にもかかわらずと言う時',question:'忙しいにもかかわらず続けていると言いたい、どう言う？',chunk:'Despite...,...',example:'Despite being busy, I try to go fishing every month.',exampleJa:'忙しいにもかかわらず、毎月釣りに行くようにしています。'},
+{id:45,topic:'条件',theme:'条件を言う時',question:'もし〜ならと言いたい、どう言う？',chunk:'If...,...',example:'If I have time, I want to go fishing this weekend.',exampleJa:'時間があれば、今週末釣りに行きたいです。'},
+{id:46,topic:'会話',theme:'許可を与える時',question:'いいよと丁寧に言いたい、どう言う？',chunk:'Feel free to...',example:'Feel free to ask me any questions.',exampleJa:'遠慮なく何でも質問してください。'},
+{id:47,topic:'感情',theme:'驚きを表す時',question:'驚いたと言いたい、どう言う？',chunk:'I was surprised to...',example:'I was surprised to hear that news.',exampleJa:'そのニュースを聞いて驚きました。'},
+{id:48,topic:'感情',theme:'心配を言う時',question:'心配していると言いたい、どう言う？',chunk:'I am worried about...',example:"I am worried about my child's future.",exampleJa:'子供の将来が心配です。'},
+{id:49,topic:'感情',theme:'喜びを言う時',question:'嬉しいと言いたい、どう言う？',chunk:'I am happy to...',example:'I am happy to spend time with my family.',exampleJa:'家族と時間を過ごせて嬉しいです。'},
+{id:50,topic:'経験',theme:'困難を乗り越えた時',question:'大変だったけど頑張ったと言いたい、どう言う？',chunk:'It was hard, but...',example:'It was hard, but I managed to finish the project.',exampleJa:'大変でしたが、なんとかプロジェクトを終わらせました。'},
 ]}];
 
 const STORAGE_KEY='chunk_trainer_v3';
 const MASTERY_THRESHOLD=5;
-let state={currentUnit:0,practiceIndex:0,stats:{},testPassed:{},tab:'practice',revealed:false,testMode:'intro',testQueue:[],testIndex:0,testCorrect:0,testRevealed:false};
+const TEST_SECONDS=10;
+let state={currentUnit:0,practiceIndex:0,stats:{},testPassed:{},tab:'practice',revealed:false,testMode:'intro',testQueue:[],testIndex:0,testCorrect:0,testRevealed:false,timer:null,timeLeft:0};
 
 function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s){const d=JSON.parse(s);state.stats=d.stats||{};state.testPassed=d.testPassed||{};state.currentUnit=d.currentUnit||0;}}catch(e){}}
 function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({stats:state.stats,testPassed:state.testPassed,currentUnit:state.currentUnit}));}catch(e){}}
@@ -187,7 +198,10 @@ function buildQueue(){return [...UNITS[state.currentUnit].chunks].sort((a,b)=>{c
 
 const mainEl=document.getElementById('main-content');
 
+function clearTimer(){if(state.timer){clearInterval(state.timer);state.timer=null;}}
+
 function switchTab(tab){
+  clearTimer();
   state.tab=tab;state.revealed=false;
   document.getElementById('tab-practice').classList.toggle('active',tab==='practice');
   document.getElementById('tab-test').classList.toggle('active',tab==='test');
@@ -195,6 +209,7 @@ function switchTab(tab){
   else{state.testMode='intro';renderTest();}
 }
 
+// ---- PRACTICE ----
 function renderPractice(){
   const unit=UNITS[state.currentUnit];
   const queue=buildQueue();
@@ -262,6 +277,7 @@ function nextChunk(){
 
 function prevChunk(){if(state.practiceIndex>0){state.practiceIndex--;state.revealed=false;renderPractice();}}
 
+// ---- TEST ----
 function renderTest(){
   if(state.testMode==='intro')renderTestIntro();
   else if(state.testMode==='running')renderTestCard();
@@ -275,10 +291,10 @@ function renderTestIntro(){
   mainEl.innerHTML=`
     <div class="test-intro">
       <h2>${unit.title} テスト</h2>
-      <p>50問からランダムに30問出題されます。<br>全問正解で合格です。</p>
+      <p>例文の日本語訳を見て、10秒以内に英語で言えるかチャレンジします。<br>30問出題、全問正解で合格です。</p>
       <div class="test-stats">
         <div class="test-stat"><div class="test-stat-num">30</div><div class="test-stat-label">出題数</div></div>
-        <div class="test-stat"><div class="test-stat-num">30</div><div class="test-stat-label">合格ライン</div></div>
+        <div class="test-stat"><div class="test-stat-num">10秒</div><div class="test-stat-label">制限時間</div></div>
         <div class="test-stat"><div class="test-stat-num">${mc}</div><div class="test-stat-label">習得済み</div></div>
       </div>
       ${passed?'<div style="color:var(--success);font-weight:600;margin-bottom:16px;">✓ このユニットは合格済みです</div>':''}
@@ -287,12 +303,43 @@ function renderTestIntro(){
 }
 
 function startTest(){
+  clearTimer();
   const unit=UNITS[state.currentUnit];
   const notMastered=unit.chunks.filter(c=>!isMastered(c.id)).sort(()=>Math.random()-0.5);
   const mastered=unit.chunks.filter(c=>isMastered(c.id)).sort(()=>Math.random()-0.5);
   state.testQueue=[...notMastered,...mastered].slice(0,30);
-  state.testIndex=0;state.testCorrect=0;state.testRevealed=false;state.testMode='running';
+  state.testIndex=0;state.testCorrect=0;state.testRevealed=false;
+  state.testMode='running';
   renderTestCard();
+  startCountdown();
+}
+
+function startCountdown(){
+  clearTimer();
+  state.timeLeft=TEST_SECONDS;
+  updateCountdownUI();
+  state.timer=setInterval(()=>{
+    state.timeLeft--;
+    updateCountdownUI();
+    if(state.timeLeft<=0){
+      clearTimer();
+      // time's up - auto reveal
+      state.testRevealed=true;
+      renderTestCard();
+    }
+  },1000);
+}
+
+function updateCountdownUI(){
+  const numEl=document.getElementById('countdown-num');
+  const barEl=document.getElementById('countdown-bar');
+  if(!numEl||!barEl)return;
+  numEl.textContent=state.timeLeft;
+  const pct=(state.timeLeft/TEST_SECONDS*100).toFixed(0);
+  barEl.style.width=pct+'%';
+  const urgent=state.timeLeft<=3;
+  numEl.className='countdown-num'+(urgent?' urgent':'');
+  barEl.className='countdown-bar'+(urgent?' urgent':'');
 }
 
 function renderTestCard(){
@@ -309,13 +356,19 @@ function renderTestCard(){
         <div style="font-size:0.7rem;color:rgba(255,255,255,0.7);">正解: ${state.testCorrect}</div>
       </div>
       <div class="test-card-body">
-        <div class="test-theme">${chunk.theme}</div>
-        <div class="test-question">${chunk.question}</div>
         ${!state.testRevealed?`
-          <div class="speak-prompt">声に出してから答えを確認してください</div>
-          <button class="test-reveal-btn" onclick="revealTestAnswer()">答えを確認する</button>`:`
+          <div class="countdown-wrap">
+            <div class="countdown-num" id="countdown-num">${state.timeLeft}</div>
+            <div class="countdown-bar-wrap"><div class="countdown-bar" id="countdown-bar" style="width:${(state.timeLeft/TEST_SECONDS*100).toFixed(0)}%"></div></div>
+          </div>
+          <div class="test-ja-prompt">${chunk.exampleJa}</div>
+          <button class="btn-check-answer" onclick="revealTestAnswer()">答えを確認する</button>
+        `:`
           <div class="test-answer-reveal">
+            <div class="answer-label">チャンク</div>
             <div class="test-chunk">${chunk.chunk}</div>
+            <div class="divider" style="margin:12px 0"></div>
+            <div class="answer-label">例文</div>
             <div class="test-example">${chunk.example}</div>
           </div>
           <div class="test-judge">
@@ -326,9 +379,14 @@ function renderTestCard(){
     </div>`;
 }
 
-function revealTestAnswer(){state.testRevealed=true;renderTestCard();}
+function revealTestAnswer(){
+  clearTimer();
+  state.testRevealed=true;
+  renderTestCard();
+}
 
 function judgeTest(correct){
+  clearTimer();
   const chunk=state.testQueue[state.testIndex];
   const s=getStats(chunk.id);
   if(correct){s.ok++;s.streak=(s.streak||0)+1;state.testCorrect++;}
@@ -336,10 +394,11 @@ function judgeTest(correct){
   state.stats[chunk.id]=s;saveState();
   state.testIndex++;state.testRevealed=false;
   if(state.testIndex>=state.testQueue.length){state.testMode='result';renderTestResult();}
-  else renderTestCard();
+  else{renderTestCard();startCountdown();}
 }
 
 function renderTestResult(){
+  clearTimer();
   const total=state.testQueue.length;
   const correct=state.testCorrect;
   const passed=correct===total;
@@ -360,7 +419,7 @@ function renderTestResult(){
     </div>`;
 }
 
-function backToPractice(){state.practiceIndex=0;state.revealed=false;switchTab('practice');}
+function backToPractice(){clearTimer();state.practiceIndex=0;state.revealed=false;switchTab('practice');}
 
 loadState();
 renderPractice();
