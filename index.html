@@ -267,7 +267,9 @@ function judge(ok){
   const chunk=buildQueue()[state.practiceIndex];
   const s=getStats(chunk.id);
   if(ok){s.ok++;s.streak=(s.streak||0)+1;}else{s.ng++;s.streak=0;}
-  state.stats[chunk.id]=s;saveState();state.revealed=false;nextChunk();
+  state.stats[chunk.id]=s;saveState();
+  state.judged=true; // 判定済みフラグ
+  renderPractice();  // 次に進まずそのまま再描画
 }
 
 function nextChunk(){
