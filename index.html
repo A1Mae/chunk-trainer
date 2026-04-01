@@ -311,7 +311,7 @@ function startTest(){
   state.testIndex=0;state.testCorrect=0;state.testRevealed=false;
   state.testMode='running';
   renderTestCard();
-  startCountdown();
+  setTimeout(startCountdown, 50);
 }
 
 function startCountdown(){
