@@ -4,340 +4,580 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chunk Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Noto+Sans+JP:wght@300;400;500&display=swap');
-
   :root {
-    --bg: #0e0e0e;
-    --surface: #1a1a1a;
-    --surface2: #242424;
-    --accent: #c8f135;
-    --accent2: #3df5c1;
-    --text: #f0f0f0;
-    --muted: #666;
-    --danger: #ff4f4f;
-    --border: #2e2e2e;
+    --bg: #f5f0e8;
+    --surface: #ffffff;
+    --surface2: #f0ebe0;
+    --ink: #1a1612;
+    --ink2: #6b6358;
+    --accent: #c84b2f;
+    --accent2: #2f6bc8;
+    --gold: #c8941a;
+    --border: #ddd8cc;
+    --success: #2a7a4b;
+    --radius: 16px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--ink);
+    font-family: 'DM Sans', 'Noto Sans JP', sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
   }
 
+  /* Header */
   header {
-    width: 100%;
-    padding: 20px 24px;
+    padding: 18px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border);
+    background: var(--surface);
   }
 
   .logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.2rem;
-    letter-spacing: 0.05em;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+
+  .logo em {
+    font-style: italic;
     color: var(--accent);
   }
 
-  .logo span { color: var(--text); }
-
-  .stats-bar {
-    display: flex;
-    gap: 16px;
-    font-size: 0.75rem;
-    color: var(--muted);
+  .unit-badge {
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 100px;
+    text-transform: uppercase;
   }
 
-  .stats-bar strong { color: var(--accent); }
+  /* Nav tabs */
+  .nav {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    gap: 0;
+  }
 
+  .nav-btn {
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    color: var(--ink2);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .nav-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Main */
   main {
-    width: 100%;
-    max-width: 640px;
-    padding: 32px 24px;
     flex: 1;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 28px 20px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
   }
-
-  /* Topic tabs */
-  .topics {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .topic-btn {
-    padding: 6px 14px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .topic-btn.active {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(200, 241, 53, 0.08);
-  }
-
-  .topic-btn:hover { color: var(--text); border-color: var(--text); }
 
   /* Progress */
-  .progress-wrap {
+  .progress-row {
     display: flex;
     align-items: center;
     gap: 12px;
   }
 
-  .progress-bar {
+  .progress-track {
     flex: 1;
-    height: 4px;
+    height: 3px;
     background: var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     overflow: hidden;
   }
 
   .progress-fill {
     height: 100%;
     background: var(--accent);
-    border-radius: 4px;
-    transition: width 0.4s ease;
+    border-radius: 3px;
+    transition: width 0.5s ease;
   }
 
-  .progress-label {
+  .progress-text {
     font-size: 0.75rem;
-    color: var(--muted);
+    color: var(--ink2);
     white-space: nowrap;
+    font-weight: 500;
   }
 
-  /* Card */
-  .card-wrap {
-    perspective: 1200px;
-  }
-
+  /* Practice card */
   .card {
-    position: relative;
-    min-height: 280px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 36px 32px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.2s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    border-radius: var(--radius);
     overflow: hidden;
-    user-select: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
 
-  .card:hover { box-shadow: 0 8px 40px rgba(0,0,0,0.4); transform: translateY(-2px); }
-  .card:active { transform: translateY(0); }
+  .card-header {
+    background: var(--ink);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-  .card::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 160px; height: 160px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(200,241,53,0.06) 0%, transparent 70%);
-    pointer-events: none;
+  .card-number {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
   .card-topic {
     font-size: 0.7rem;
-    letter-spacing: 0.15em;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--accent);
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
   }
 
-  .card-scene {
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: var(--text);
-    font-weight: 500;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    padding: 20px 0;
+  .card-body {
+    padding: 28px 24px;
+  }
+
+  .card-theme {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .card-question {
+    font-size: 0.9rem;
+    color: var(--ink2);
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-radius: 10px;
+    border-left: 3px solid var(--accent);
   }
 
   .card-hint {
+    margin-top: 16px;
     font-size: 0.75rem;
-    color: var(--muted);
+    color: var(--ink2);
     display: flex;
     align-items: center;
     gap: 6px;
+    cursor: pointer;
+    width: fit-content;
   }
 
-  .card-hint::before {
-    content: '▶';
-    font-size: 0.6rem;
-    color: var(--accent);
+  .card-hint svg {
+    width: 14px; height: 14px;
+    fill: var(--accent);
+    transition: transform 0.2s;
   }
 
-  /* Answer reveal */
-  .answer-wrap {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px 28px 24px;
-    animation: slideUp 0.3s ease;
+  /* Answer section */
+  .answer-section {
+    border-top: 1px solid var(--border);
+    padding: 24px 24px 28px;
+    animation: fadeIn 0.3s ease;
   }
 
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(12px); }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
   .answer-label {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+    font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 10px;
-    font-family: 'Syne', sans-serif;
+    color: var(--ink2);
+    margin-bottom: 8px;
   }
 
-  .chunk-main {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.4rem;
-    font-weight: 700;
+  .chunk-display {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
     color: var(--accent);
-    margin-bottom: 6px;
     line-height: 1.4;
+    margin-bottom: 16px;
   }
 
-  .chunk-example {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.6;
-    border-left: 2px solid var(--border);
-    padding-left: 12px;
-    margin-top: 12px;
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
   }
 
-  .chunk-example em {
+  .example-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink2);
+    margin-bottom: 8px;
+  }
+
+  .example-display {
+    font-size: 1rem;
+    color: var(--ink);
+    line-height: 1.7;
+    font-style: italic;
+    font-family: 'DM Serif Display', serif;
+  }
+
+  .example-display em {
     color: var(--accent2);
     font-style: normal;
+    font-family: 'DM Serif Display', serif;
   }
 
-  /* Action buttons */
-  .actions {
+  /* Read count */
+  .read-section {
+    padding: 16px 24px 24px;
+    border-top: 1px solid var(--border);
     display: flex;
-    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    animation: fadeIn 0.3s ease;
   }
 
-  .btn {
+  .read-label {
+    font-size: 0.8rem;
+    color: var(--ink2);
+  }
+
+  .read-count {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--ink);
+  }
+
+  .read-target {
+    font-size: 0.75rem;
+    color: var(--ink2);
+  }
+
+  .btn-read {
+    padding: 12px 24px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-read:hover { background: #b03d23; transform: translateY(-1px); }
+  .btn-read:active { transform: translateY(0); }
+
+  .btn-read.done {
+    background: var(--success);
+  }
+
+  /* Nav buttons */
+  .nav-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-nav {
     flex: 1;
     padding: 14px;
     border-radius: 12px;
-    border: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
-    font-family: 'Noto Sans JP', sans-serif;
+    font-family: 'DM Sans', sans-serif;
   }
 
-  .btn-ok {
-    background: var(--accent);
-    color: #0e0e0e;
+  .btn-nav:hover { background: var(--surface2); }
+
+  .btn-nav.primary {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
   }
 
-  .btn-ok:hover { background: #d4f84a; }
+  .btn-nav.primary:hover { background: #2d2820; }
 
-  .btn-ng {
-    background: var(--surface2);
-    color: var(--text);
+  /* Test mode */
+  .test-intro {
+    background: var(--surface);
     border: 1px solid var(--border);
-  }
-
-  .btn-ng:hover { border-color: var(--danger); color: var(--danger); }
-
-  /* Result screen */
-  .result-screen {
+    border-radius: var(--radius);
+    padding: 32px 28px;
     text-align: center;
-    padding: 40px 0;
-    animation: slideUp 0.4s ease;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
 
-  .result-emoji { font-size: 3rem; margin-bottom: 16px; }
-
-  .result-title {
-    font-family: 'Syne', sans-serif;
+  .test-intro h2 {
+    font-family: 'DM Serif Display', serif;
     font-size: 1.8rem;
-    font-weight: 800;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 
-  .result-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
+  .test-intro p {
+    color: var(--ink2);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
 
-  .result-stats {
+  .test-stats {
     display: flex;
     justify-content: center;
     gap: 32px;
-    margin-bottom: 36px;
+    margin-bottom: 28px;
   }
 
-  .stat-item { text-align: center; }
+  .test-stat {
+    text-align: center;
+  }
 
-  .stat-num {
-    font-family: 'Syne', sans-serif;
+  .test-stat-num {
+    font-family: 'DM Serif Display', serif;
     font-size: 2rem;
-    font-weight: 800;
     color: var(--accent);
   }
 
-  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .test-stat-label {
+    font-size: 0.75rem;
+    color: var(--ink2);
+  }
 
-  .btn-restart {
+  .btn-start-test {
     padding: 14px 40px;
     background: var(--accent);
-    color: #0e0e0e;
+    color: white;
     border: none;
     border-radius: 12px;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
-    font-family: 'Syne', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     transition: all 0.2s;
   }
 
-  .btn-restart:hover { background: #d4f84a; transform: translateY(-1px); }
+  .btn-start-test:hover { background: #b03d23; }
 
-  /* Mastery badge */
-  .mastery-row {
+  /* Test card */
+  .test-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  .test-card-header {
+    background: var(--accent2);
+    padding: 14px 24px;
     display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-top: 4px;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  .mastery-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--border);
-    transition: background 0.3s;
+  .test-card-num {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.7);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
-  .mastery-dot.done { background: var(--accent); }
+  .test-card-body {
+    padding: 28px 24px;
+  }
+
+  .test-theme {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+  }
+
+  .test-question {
+    font-size: 0.9rem;
+    color: var(--ink2);
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-radius: 10px;
+    border-left: 3px solid var(--accent2);
+    margin-bottom: 20px;
+  }
+
+  .test-input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .test-reveal-btn {
+    padding: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: var(--ink2);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .test-reveal-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  .test-answer-reveal {
+    padding: 20px;
+    background: var(--surface2);
+    border-radius: 10px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .test-chunk {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .test-example {
+    font-size: 0.85rem;
+    color: var(--ink2);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .test-judge {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .btn-correct {
+    flex: 1;
+    padding: 12px;
+    background: var(--success);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-wrong {
+    flex: 1;
+    padding: 12px;
+    background: var(--surface);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* Result */
+  .result-screen {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px 28px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    animation: fadeIn 0.4s ease;
+  }
+
+  .result-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+  }
+
+  .result-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+
+  .result-sub {
+    color: var(--ink2);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+  }
+
+  .result-score {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3.5rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .result-score-label {
+    font-size: 0.85rem;
+    color: var(--ink2);
+    margin-bottom: 28px;
+  }
+
+  .result-pass {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .result-pass.pass { background: #d4f0e0; color: var(--success); }
+  .result-pass.fail { background: #fde8e4; color: var(--accent); }
+
+  .result-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 
   .hidden { display: none !important; }
 </style>
@@ -345,332 +585,361 @@
 <body>
 
 <header>
-  <div class="logo">CHUNK<span>trainer</span></div>
-  <div class="stats-bar">
-    覚えた <strong id="hdr-done">0</strong> / <span id="hdr-total">0</span>
-  </div>
+  <div class="logo">Chunk<em>Trainer</em></div>
+  <div class="unit-badge" id="unit-badge">Unit 1</div>
 </header>
 
-<main>
-  <!-- Topic selector -->
-  <div class="topics" id="topics"></div>
+<div class="nav">
+  <button class="nav-btn active" id="tab-practice" onclick="switchTab('practice')">練習</button>
+  <button class="nav-btn" id="tab-test" onclick="switchTab('test')">テスト</button>
+</div>
 
-  <!-- Progress -->
-  <div class="progress-wrap">
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-label">0 / 0</div>
-  </div>
-
-  <!-- Card -->
-  <div class="card-wrap" id="card-wrap">
-    <div class="card" id="card" onclick="revealAnswer()">
-      <div class="card-topic" id="card-topic"></div>
-      <div class="card-scene" id="card-scene"></div>
-      <div class="card-hint">タップして答えを確認</div>
-    </div>
-  </div>
-
-  <!-- Answer -->
-  <div class="answer-wrap hidden" id="answer-wrap">
-    <div class="answer-label">チャンク</div>
-    <div class="chunk-main" id="chunk-main"></div>
-    <div class="chunk-example" id="chunk-example"></div>
-  </div>
-
-  <!-- Mastery dots -->
-  <div class="mastery-row" id="mastery-row"></div>
-
-  <!-- Action buttons -->
-  <div class="actions hidden" id="actions">
-    <button class="btn btn-ng" onclick="markCard(false)">もう一度</button>
-    <button class="btn btn-ok" onclick="markCard(true)">覚えた ✓</button>
-  </div>
-
-  <!-- Result -->
-  <div class="result-screen hidden" id="result-screen">
-    <div class="result-emoji">🎉</div>
-    <div class="result-title">セッション完了！</div>
-    <div class="result-sub">今日の練習お疲れさまでした</div>
-    <div class="result-stats">
-      <div class="stat-item">
-        <div class="stat-num" id="res-ok">0</div>
-        <div class="stat-label">覚えた</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num" id="res-ng">0</div>
-        <div class="stat-label">もう一度</div>
-      </div>
-    </div>
-    <button class="btn-restart" onclick="restartSession()">もう一度練習する</button>
-  </div>
+<main id="main-content">
 </main>
 
 <script>
-const CHUNKS = [
-  // 家族
+// =====================
+// DATA
+// =====================
+const UNITS = [
   {
-    id: 1, topic: '家族',
-    scene: '子供にとって家族と過ごす時間が大切だと伝えたい',
-    chunk: 'I believe it is important for...',
-    example: '<em>I believe it is important for</em> children to spend time with their family.'
-  },
-  {
-    id: 2, topic: '家族',
-    scene: '子育ての難しさについて話したい',
-    chunk: 'It is not easy to...',
-    example: '<em>It is not easy to</em> raise children in today\'s busy society.'
-  },
-  {
-    id: 3, topic: '家族',
-    scene: '最近の傾向・社会の変化について述べたい',
-    chunk: 'In recent years,...',
-    example: '<em>In recent years,</em> more parents are struggling to balance work and family life.'
-  },
-  {
-    id: 4, topic: '家族',
-    scene: '理由を説明したい',
-    chunk: 'This is because...',
-    example: '<em>This is because</em> spending time together strengthens family bonds.'
-  },
-  {
-    id: 5, topic: '家族',
-    scene: 'まとめ・結論を言いたい',
-    chunk: 'For these reasons, I think...',
-    example: '<em>For these reasons, I think</em> family time should be a priority.'
-  },
-
-  // 釣り
-  {
-    id: 6, topic: '釣り',
-    scene: '趣味について相手に話したい',
-    chunk: 'One of my hobbies is...',
-    example: '<em>One of my hobbies is</em> fishing in the rivers near Oita.'
-  },
-  {
-    id: 7, topic: '釣り',
-    scene: '自然・環境の重要性を伝えたい',
-    chunk: 'It is important to protect...',
-    example: '<em>It is important to protect</em> the natural environment for future generations.'
-  },
-  {
-    id: 8, topic: '釣り',
-    scene: '何かが増えている・減っていると言いたい',
-    chunk: 'The number of ... is increasing / decreasing.',
-    example: '<em>The number of</em> people enjoying outdoor activities <em>is increasing.</em>'
-  },
-  {
-    id: 9, topic: '釣り',
-    scene: '〜することでリフレッシュできると言いたい',
-    chunk: '... helps me relax and...',
-    example: 'Fishing <em>helps me relax and</em> clear my mind after work.'
-  },
-  {
-    id: 10, topic: '釣り',
-    scene: '例を挙げたい',
-    chunk: 'For example,...',
-    example: '<em>For example,</em> many people go fishing to reduce stress.'
-  },
-
-  // Web開発
-  {
-    id: 11, topic: 'Web開発',
-    scene: '技術の変化が速いと言いたい',
-    chunk: 'Technology is changing rapidly, and...',
-    example: '<em>Technology is changing rapidly, and</em> developers need to keep learning.'
-  },
-  {
-    id: 12, topic: 'Web開発',
-    scene: '〜することが可能になったと言いたい',
-    chunk: 'It has become possible to...',
-    example: '<em>It has become possible to</em> build websites easily with modern tools.'
-  },
-  {
-    id: 13, topic: 'Web開発',
-    scene: 'メリット・利点を述べたい',
-    chunk: 'One of the advantages of ... is...',
-    example: '<em>One of the advantages of</em> remote work <em>is</em> that you can work from anywhere.'
-  },
-  {
-    id: 14, topic: 'Web開発',
-    scene: '一方で問題点もあると言いたい',
-    chunk: 'On the other hand,...',
-    example: '<em>On the other hand,</em> working alone can sometimes be isolating.'
-  },
-  {
-    id: 15, topic: 'Web開発',
-    scene: '〜に取り組んでいると伝えたい',
-    chunk: 'I am working on...',
-    example: '<em>I am working on</em> a website project in my spare time.'
-  },
-
-  // 旅行
-  {
-    id: 16, topic: '旅行',
-    scene: '旅行が好きな理由を言いたい',
-    chunk: 'Traveling allows me to...',
-    example: '<em>Traveling allows me to</em> experience different cultures and broaden my perspective.'
-  },
-  {
-    id: 17, topic: '旅行',
-    scene: '行ってみたい・行く予定と言いたい',
-    chunk: 'I am planning to...',
-    example: '<em>I am planning to</em> visit Karuizawa with my family this spring.'
-  },
-  {
-    id: 18, topic: '旅行',
-    scene: '〜することをおすすめしたい',
-    chunk: 'I would recommend ... because...',
-    example: '<em>I would recommend</em> visiting local areas <em>because</em> they offer unique experiences.'
-  },
-  {
-    id: 19, topic: '旅行',
-    scene: '経験から学んだことを言いたい',
-    chunk: 'Through this experience, I learned that...',
-    example: '<em>Through this experience, I learned that</em> stepping outside your routine is refreshing.'
-  },
-  {
-    id: 20, topic: '旅行',
-    scene: '〜と比べて違う・似ていると言いたい',
-    chunk: 'Compared to..., ... is more...',
-    example: '<em>Compared to</em> busy cities, rural areas <em>are more</em> peaceful and relaxing.'
+    id: 1,
+    title: 'Unit 1',
+    chunks: [
+      { id:1, topic:'意見', theme:'自分の意見を言う時', question:'釣りは楽しいと思う、どう言う？', chunk:'I think...', example:'I think fishing is fun.' },
+      { id:2, topic:'意見', theme:'強く意見を言う時', question:'家族は大切だと強く思う、どう言う？', chunk:'I believe...', example:'I believe family is the most important thing.' },
+      { id:3, topic:'好み', theme:'好きなものを言う時', question:'釣りが好きだと言いたい、どう言う？', chunk:'I like...', example:'I like fishing.' },
+      { id:4, topic:'好み', theme:'好きな理由を言う時', question:'釣りが好きな理由を言いたい、どう言う？', chunk:'I like...because...', example:'I like fishing because it helps me relax.' },
+      { id:5, topic:'意志', theme:'したいことを言う時', question:'旅行したいと言いたい、どう言う？', chunk:'I want to...', example:'I want to travel with my family.' },
+      { id:6, topic:'説明', theme:'理由を説明する時', question:'なぜ家族時間が大切か説明したい、どう言う？', chunk:'This is because...', example:'This is because family bonds are very important.' },
+      { id:7, topic:'説明', theme:'例を挙げる時', question:'具体例を出したい、どう言う？', chunk:'For example,...', example:'For example, I go fishing every weekend.' },
+      { id:8, topic:'依頼', theme:'相手に依頼する時', question:'手伝ってほしいと言いたい、どう言う？', chunk:'Could you...?', example:'Could you help me with this?' },
+      { id:9, topic:'依頼', theme:'許可を求める時', question:'やっていいか聞きたい、どう言う？', chunk:'Would it be possible for me to...?', example:'Would it be possible for me to take a look at this?' },
+      { id:10, topic:'予定', theme:'予定を言う時', question:'カルイザワに行く予定と言いたい、どう言う？', chunk:'I am planning to...', example:'I am planning to visit Karuizawa.' },
+      { id:11, topic:'現状', theme:'今やっていることを言う時', question:'サイトを作っていると言いたい、どう言う？', chunk:'I am working on...', example:'I am working on a new website.' },
+      { id:12, topic:'経験', theme:'経験を言う時', question:'釣りをしたことがあると言いたい、どう言う？', chunk:'I have...before.', example:'I have gone fishing in Oita before.' },
+      { id:13, topic:'経験', theme:'したことがない時', question:'その場所に行ったことがないと言いたい、どう言う？', chunk:'I have never...', example:'I have never been to Tokyo.' },
+      { id:14, topic:'提案', theme:'提案する時', question:'一緒に行こうと提案したい、どう言う？', chunk:'I suggest that we...', example:'I suggest that we go fishing together.' },
+      { id:15, topic:'確認', theme:'相手の意見を聞く時', question:'どう思うか聞きたい、どう言う？', chunk:'What do you think about...?', example:'What do you think about this idea?' },
+      { id:16, topic:'意見', theme:'賛成する時', question:'相手の意見に賛成したい、どう言う？', chunk:'I agree with...', example:'I agree with your opinion.' },
+      { id:17, topic:'意見', theme:'反対する時', question:'相手の意見に反対したい、どう言う？', chunk:'I disagree with...', example:'I disagree with that idea.' },
+      { id:18, topic:'構成', theme:'一方でと言う時', question:'反対の意見も言いたい、どう言う？', chunk:'On the other hand,...', example:'On the other hand, it can be difficult.' },
+      { id:19, topic:'構成', theme:'まとめる時', question:'結論を言いたい、どう言う？', chunk:'For these reasons,...', example:'For these reasons, I think family time is important.' },
+      { id:20, topic:'社会', theme:'最近の傾向を言う時', question:'最近〜が増えていると言いたい、どう言う？', chunk:'In recent years,...', example:'In recent years, more people enjoy outdoor activities.' },
+      { id:21, topic:'社会', theme:'数が増えていると言う時', question:'釣り人が増えていると言いたい、どう言う？', chunk:'The number of...is increasing.', example:'The number of people who enjoy fishing is increasing.' },
+      { id:22, topic:'社会', theme:'数が減っていると言う時', question:'子供の数が減っていると言いたい、どう言う？', chunk:'The number of...is decreasing.', example:'The number of children is decreasing in Japan.' },
+      { id:23, topic:'意見', theme:'大切だと伝える時', question:'家族時間が大切だと伝えたい、どう言う？', chunk:'I believe it is important to...', example:'I believe it is important to spend time with family.' },
+      { id:24, topic:'意見', theme:'〜にとって大切だと伝える時', question:'子供にとって大切だと伝えたい、どう言う？', chunk:'I believe it is important for...to...', example:'I believe it is important for children to spend time with family.' },
+      { id:25, topic:'説明', theme:'難しいと言う時', question:'子育ては難しいと言いたい、どう言う？', chunk:'It is not easy to...', example:'It is not easy to raise children.' },
+      { id:26, topic:'変化', theme:'可能になったと言う時', question:'簡単にサイトが作れるようになったと言いたい、どう言う？', chunk:'It has become possible to...', example:'It has become possible to build websites easily.' },
+      { id:27, topic:'比較', theme:'メリットを言う時', question:'釣りのメリットを言いたい、どう言う？', chunk:'One of the advantages of...is...', example:'One of the advantages of fishing is that it reduces stress.' },
+      { id:28, topic:'比較', theme:'デメリットを言う時', question:'問題点を言いたい、どう言う？', chunk:'One of the disadvantages of...is...', example:'One of the disadvantages of remote work is feeling lonely.' },
+      { id:29, topic:'比較', theme:'比較する時', question:'都会と田舎を比べたい、どう言う？', chunk:'Compared to..., ...is more...', example:'Compared to cities, rural areas are more peaceful.' },
+      { id:30, topic:'提案', theme:'おすすめする時', question:'釣りをおすすめしたい、どう言う？', chunk:'I would recommend...because...', example:'I would recommend fishing because it is relaxing.' },
+      { id:31, topic:'経験', theme:'経験から学んだ時', question:'旅行から学んだことを言いたい、どう言う？', chunk:'Through this experience, I learned that...', example:'Through this experience, I learned that travel broadens your mind.' },
+      { id:32, topic:'説明', theme:'〜が好きな人に向けて言う時', question:'アウトドアが好きな人に向けて言いたい、どう言う？', chunk:'For people who like...,...', example:'For people who like nature, fishing is a great hobby.' },
+      { id:33, topic:'会話', theme:'考える時間が欲しい時', question:'すぐに答えられない、どう言う？', chunk:'Let me think about that for a moment.', example:'Let me think about that for a moment.' },
+      { id:34, topic:'会話', theme:'聞き返す時', question:'もう一度言ってほしい、どう言う？', chunk:'Could you repeat that?', example:'I beg your pardon? Could you repeat that?' },
+      { id:35, topic:'会話', theme:'確認する時', question:'理解できたか確認したい、どう言う？', chunk:'Do you mean...?', example:'Do you mean we should start now?' },
+      { id:36, topic:'趣味', theme:'自分の趣味を言う時', question:'趣味を聞かれた、どう言う？', chunk:'One of my hobbies is...', example:'One of my hobbies is fishing in the rivers near Oita.' },
+      { id:37, topic:'将来', theme:'将来の話をする時', question:'将来〜したいと言いたい、どう言う？', chunk:'In the future, I would like to...', example:'In the future, I would like to travel abroad with my family.' },
+      { id:38, topic:'現状', theme:'現状を説明する時', question:'今の状況を説明したい、どう言う？', chunk:'At the moment,...', example:'At the moment, I am developing a new website.' },
+      { id:39, topic:'変化', theme:'変化を言う時', question:'技術が急速に変化していると言いたい、どう言う？', chunk:'...is changing rapidly.', example:'Technology is changing rapidly these days.' },
+      { id:40, topic:'社会', theme:'社会問題を言う時', question:'社会問題について言いたい、どう言う？', chunk:'One of the biggest problems is...', example:'One of the biggest problems is the lack of work-life balance.' },
+      { id:41, topic:'影響', theme:'影響を言う時', question:'〜に影響を与えると言いたい、どう言う？', chunk:'...has a big impact on...', example:'The internet has a big impact on our daily lives.' },
+      { id:42, topic:'社会', theme:'環境を守ると言う時', question:'自然を守ることが大切と言いたい、どう言う？', chunk:'It is important to protect...', example:'It is important to protect the natural environment.' },
+      { id:43, topic:'理由', theme:'〜のおかげでと言う時', question:'技術のおかげで便利になったと言いたい、どう言う？', chunk:'Thanks to...,...', example:'Thanks to technology, we can work from anywhere.' },
+      { id:44, topic:'逆接', theme:'〜にもかかわらずと言う時', question:'忙しいにもかかわらず続けていると言いたい、どう言う？', chunk:'Despite...,...', example:'Despite being busy, I try to go fishing every month.' },
+      { id:45, topic:'条件', theme:'条件を言う時', question:'もし〜ならと言いたい、どう言う？', chunk:'If...,...', example:'If I have time, I want to go fishing this weekend.' },
+      { id:46, topic:'会話', theme:'許可を与える時', question:'いいよと言いたい、どう言う？', chunk:'Feel free to...', example:'Feel free to ask me any questions.' },
+      { id:47, topic:'感情', theme:'驚きを表す時', question:'驚いたと言いたい、どう言う？', chunk:'I was surprised to...', example:'I was surprised to hear that news.' },
+      { id:48, topic:'感情', theme:'心配を言う時', question:'心配していると言いたい、どう言う？', chunk:'I am worried about...', example:'I am worried about my child\'s future.' },
+      { id:49, topic:'感情', theme:'喜びを言う時', question:'嬉しいと言いたい、どう言う？', chunk:'I am happy to...', example:'I am happy to spend time with my family.' },
+      { id:50, topic:'経験', theme:'困難を乗り越えた時', question:'大変だったけど頑張ったと言いたい、どう言う？', chunk:'It was hard, but...', example:'It was hard, but I managed to finish the project.' },
+    ]
   }
 ];
 
-const TOPICS = ['すべて', '家族', '釣り', 'Web開発', '旅行'];
-const STORAGE_KEY = 'chunk_mastery_v1';
+// =====================
+// STATE
+// =====================
+const STORAGE_KEY = 'chunk_trainer_v2';
+let state = {
+  currentUnit: 0,
+  practiceIndex: 0,
+  readCounts: {}, // chunkId -> count
+  testPassed: {},  // unitId -> bool
+  tab: 'practice',
+  // test state
+  testMode: false, // 'intro' | 'running' | 'result'
+  testQueue: [],
+  testIndex: 0,
+  testCorrect: 0,
+  testRevealed: false,
+};
 
-let currentTopic = 'すべて';
-let filteredChunks = [];
-let queue = [];
-let currentIndex = 0;
-let mastery = {};
-let sessionOk = 0;
-let sessionNg = 0;
-
-// Load mastery from localStorage
-function loadMastery() {
+function loadState() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) mastery = JSON.parse(saved);
-  } catch(e) { mastery = {}; }
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) {
+      const saved = JSON.parse(s);
+      state.readCounts = saved.readCounts || {};
+      state.testPassed = saved.testPassed || {};
+      state.currentUnit = saved.currentUnit || 0;
+    }
+  } catch(e) {}
 }
 
-function saveMastery() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(mastery)); } catch(e) {}
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      readCounts: state.readCounts,
+      testPassed: state.testPassed,
+      currentUnit: state.currentUnit,
+    }));
+  } catch(e) {}
 }
 
-function getFiltered() {
-  if (currentTopic === 'すべて') return [...CHUNKS];
-  return CHUNKS.filter(c => c.topic === currentTopic);
-}
+// =====================
+// RENDER
+// =====================
+const main = document.getElementById('main-content');
 
-function buildQueue() {
-  filteredChunks = getFiltered();
-  // Not-yet-mastered first, then mastered
-  const notDone = filteredChunks.filter(c => !mastery[c.id]);
-  const done = filteredChunks.filter(c => mastery[c.id]);
-  queue = [...notDone, ...done];
-  currentIndex = 0;
-  sessionOk = 0;
-  sessionNg = 0;
-}
-
-function renderTopics() {
-  const el = document.getElementById('topics');
-  el.innerHTML = TOPICS.map(t => `
-    <button class="topic-btn ${t === currentTopic ? 'active' : ''}" onclick="selectTopic('${t}')">${t}</button>
-  `).join('');
-}
-
-function selectTopic(t) {
-  currentTopic = t;
-  renderTopics();
-  buildQueue();
-  showCard();
-}
-
-function updateProgress() {
-  const total = queue.length;
-  const done = currentIndex;
-  const pct = total ? Math.round(done / total * 100) : 0;
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-label').textContent = `${done} / ${total}`;
-
-  const totalMastered = Object.values(mastery).filter(Boolean).length;
-  document.getElementById('hdr-done').textContent = totalMastered;
-  document.getElementById('hdr-total').textContent = CHUNKS.length;
-}
-
-function renderMasteryDots() {
-  const row = document.getElementById('mastery-row');
-  row.innerHTML = filteredChunks.map(c =>
-    `<div class="mastery-dot ${mastery[c.id] ? 'done' : ''}"></div>`
-  ).join('');
-}
-
-function showCard() {
-  document.getElementById('result-screen').classList.add('hidden');
-  document.getElementById('card-wrap').classList.remove('hidden');
-  document.getElementById('answer-wrap').classList.add('hidden');
-  document.getElementById('actions').classList.add('hidden');
-
-  if (currentIndex >= queue.length) {
-    showResult();
-    return;
+function switchTab(tab) {
+  state.tab = tab;
+  document.getElementById('tab-practice').classList.toggle('active', tab === 'practice');
+  document.getElementById('tab-test').classList.toggle('active', tab === 'test');
+  if (tab === 'practice') {
+    state.practiceIndex = 0;
+    renderPractice();
+  } else {
+    state.testMode = 'intro';
+    renderTest();
   }
+}
 
-  const chunk = queue[currentIndex];
-  document.getElementById('card-topic').textContent = chunk.topic;
-  document.getElementById('card-scene').textContent = chunk.scene;
-  document.getElementById('chunk-main').textContent = chunk.chunk;
-  document.getElementById('chunk-example').innerHTML = chunk.example;
+// ---- PRACTICE ----
+function renderPractice() {
+  const unit = UNITS[state.currentUnit];
+  const chunk = unit.chunks[state.practiceIndex];
+  const total = unit.chunks.length;
+  const readCount = state.readCounts[chunk.id] || 0;
+  const TARGET = 5;
 
-  updateProgress();
-  renderMasteryDots();
+  document.getElementById('unit-badge').textContent = unit.title;
+
+  main.innerHTML = `
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" style="width:${((state.practiceIndex+1)/total*100).toFixed(0)}%"></div></div>
+      <div class="progress-text">${state.practiceIndex+1} / ${total}</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">#${chunk.id}</div>
+        <div class="card-topic">${chunk.topic}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-theme">${chunk.theme}</div>
+        <div class="card-question">${chunk.question}</div>
+        <div class="card-hint" onclick="revealAnswer()">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          タップして答えを見る
+        </div>
+      </div>
+      <div class="answer-section hidden" id="answer-section">
+        <div class="answer-label">チャンク</div>
+        <div class="chunk-display">${chunk.chunk}</div>
+        <div class="divider"></div>
+        <div class="example-label">例文</div>
+        <div class="example-display">${chunk.example}</div>
+      </div>
+      <div class="read-section hidden" id="read-section">
+        <div>
+          <div class="read-label">音読回数</div>
+          <div class="read-count" id="read-count">${readCount}</div>
+          <div class="read-target">目標: ${TARGET}回</div>
+        </div>
+        <button class="btn-read ${readCount >= TARGET ? 'done' : ''}" id="btn-read" onclick="countRead()">
+          ${readCount >= TARGET ? '✓ 完了' : '音読した'}
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <button class="btn-nav" onclick="prevChunk()" ${state.practiceIndex === 0 ? 'disabled style="opacity:0.4"' : ''}>← 前へ</button>
+      <button class="btn-nav primary" onclick="nextChunk()">${state.practiceIndex === total-1 ? 'テストへ →' : '次へ →'}</button>
+    </div>
+  `;
 }
 
 function revealAnswer() {
-  document.getElementById('answer-wrap').classList.remove('hidden');
-  document.getElementById('actions').classList.remove('hidden');
+  document.getElementById('answer-section').classList.remove('hidden');
+  document.getElementById('read-section').classList.remove('hidden');
+  document.querySelector('.card-hint').classList.add('hidden');
 }
 
-function markCard(ok) {
-  const chunk = queue[currentIndex];
-  if (ok) {
-    mastery[chunk.id] = true;
-    sessionOk++;
-  } else {
-    mastery[chunk.id] = false;
-    sessionNg++;
-    // Re-add to end of queue for retry
-    queue.push(chunk);
+function countRead() {
+  const unit = UNITS[state.currentUnit];
+  const chunk = unit.chunks[state.practiceIndex];
+  const TARGET = 5;
+  state.readCounts[chunk.id] = (state.readCounts[chunk.id] || 0) + 1;
+  saveState();
+  const count = state.readCounts[chunk.id];
+  document.getElementById('read-count').textContent = count;
+  if (count >= TARGET) {
+    document.getElementById('btn-read').textContent = '✓ 完了';
+    document.getElementById('btn-read').classList.add('done');
   }
-  saveMastery();
-  currentIndex++;
-  showCard();
 }
 
-function showResult() {
-  document.getElementById('card-wrap').classList.add('hidden');
-  document.getElementById('answer-wrap').classList.add('hidden');
-  document.getElementById('actions').classList.add('hidden');
-  document.getElementById('result-screen').classList.remove('hidden');
-  document.getElementById('res-ok').textContent = sessionOk;
-  document.getElementById('res-ng').textContent = sessionNg;
-  renderMasteryDots();
-  updateProgress();
+function nextChunk() {
+  const unit = UNITS[state.currentUnit];
+  if (state.practiceIndex >= unit.chunks.length - 1) {
+    switchTab('test');
+  } else {
+    state.practiceIndex++;
+    renderPractice();
+  }
 }
 
-function restartSession() {
-  buildQueue();
-  showCard();
+function prevChunk() {
+  if (state.practiceIndex > 0) {
+    state.practiceIndex--;
+    renderPractice();
+  }
 }
 
-// Init
-loadMastery();
-renderTopics();
-buildQueue();
-showCard();
+// ---- TEST ----
+function renderTest() {
+  if (state.testMode === 'intro') renderTestIntro();
+  else if (state.testMode === 'running') renderTestCard();
+  else if (state.testMode === 'result') renderTestResult();
+}
+
+function renderTestIntro() {
+  const unit = UNITS[state.currentUnit];
+  const passed = state.testPassed[unit.id];
+  main.innerHTML = `
+    <div class="test-intro">
+      <h2>${unit.title} テスト</h2>
+      <p>練習した50問から30問がランダムに出題されます。<br>全問正解で合格です。</p>
+      <div class="test-stats">
+        <div class="test-stat">
+          <div class="test-stat-num">30</div>
+          <div class="test-stat-label">出題数</div>
+        </div>
+        <div class="test-stat">
+          <div class="test-stat-num">30</div>
+          <div class="test-stat-label">合格ライン</div>
+        </div>
+      </div>
+      ${passed ? '<div style="color:var(--success);font-weight:600;margin-bottom:16px;">✓ このユニットは合格済みです</div>' : ''}
+      <button class="btn-start-test" onclick="startTest()">テスト開始</button>
+    </div>
+  `;
+}
+
+function startTest() {
+  const unit = UNITS[state.currentUnit];
+  // shuffle and pick 30
+  const shuffled = [...unit.chunks].sort(() => Math.random() - 0.5);
+  state.testQueue = shuffled.slice(0, 30);
+  state.testIndex = 0;
+  state.testCorrect = 0;
+  state.testRevealed = false;
+  state.testMode = 'running';
+  renderTestCard();
+}
+
+function renderTestCard() {
+  const chunk = state.testQueue[state.testIndex];
+  const total = state.testQueue.length;
+  main.innerHTML = `
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" style="width:${((state.testIndex)/total*100).toFixed(0)}%;background:var(--accent2)"></div></div>
+      <div class="progress-text">${state.testIndex+1} / ${total}</div>
+    </div>
+    <div class="test-card">
+      <div class="test-card-header">
+        <div class="test-card-num">問題 ${state.testIndex+1}</div>
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.7);">正解: ${state.testCorrect}</div>
+      </div>
+      <div class="test-card-body">
+        <div class="test-theme">${chunk.theme}</div>
+        <div class="test-question">${chunk.question}</div>
+        <div class="test-input-area">
+          ${!state.testRevealed ? `
+            <div style="font-size:0.8rem;color:var(--ink2);text-align:center;padding:12px;">声に出して言ってみてください</div>
+            <button class="test-reveal-btn" onclick="revealTestAnswer()">答えを確認する</button>
+          ` : `
+            <div class="test-answer-reveal">
+              <div class="test-chunk">${chunk.chunk}</div>
+              <div class="test-example">${chunk.example}</div>
+            </div>
+            <div class="test-judge">
+              <button class="btn-wrong" onclick="judgeTest(false)">✗ 言えなかった</button>
+              <button class="btn-correct" onclick="judgeTest(true)">✓ 言えた</button>
+            </div>
+          `}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function revealTestAnswer() {
+  state.testRevealed = true;
+  renderTestCard();
+}
+
+function judgeTest(correct) {
+  if (correct) state.testCorrect++;
+  state.testIndex++;
+  state.testRevealed = false;
+  if (state.testIndex >= state.testQueue.length) {
+    state.testMode = 'result';
+    renderTestResult();
+  } else {
+    renderTestCard();
+  }
+}
+
+function renderTestResult() {
+  const total = state.testQueue.length;
+  const correct = state.testCorrect;
+  const passed = correct === total;
+  const unit = UNITS[state.currentUnit];
+  if (passed) {
+    state.testPassed[unit.id] = true;
+    saveState();
+  }
+  main.innerHTML = `
+    <div class="result-screen">
+      <div class="result-icon">${passed ? '🎉' : '📚'}</div>
+      <div class="result-title">${passed ? '合格！' : 'もう少し'}</div>
+      <div class="result-sub">${passed ? 'Unit 1 クリアおめでとうございます' : '練習を続けて再挑戦しましょう'}</div>
+      <div class="result-score">${correct} / ${total}</div>
+      <div class="result-score-label">正解数</div>
+      <div class="result-pass ${passed ? 'pass' : 'fail'}">${passed ? 'PASS' : 'TRY AGAIN'}</div>
+      <div class="result-actions">
+        ${!passed ? `<button class="btn-nav primary" onclick="startTest()">もう一度テスト</button>` : ''}
+        <button class="btn-nav" onclick="backToPractice()">練習に戻る</button>
+      </div>
+    </div>
+  `;
+}
+
+function backToPractice() {
+  state.practiceIndex = 0;
+  switchTab('practice');
+}
+
+// =====================
+// INIT
+// =====================
+loadState();
+renderPractice();
 </script>
 </body>
 </html>
