@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chunk Trainer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0e0e0e;
+    --surface: #1a1a1a;
+    --surface2: #242424;
+    --accent: #c8f135;
+    --accent2: #3df5c1;
+    --text: #f0f0f0;
+    --muted: #666;
+    --danger: #ff4f4f;
+    --border: #2e2e2e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header {
+    width: 100%;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+
+  .logo span { color: var(--text); }
+
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .stats-bar strong { color: var(--accent); }
+
+  main {
+    width: 100%;
+    max-width: 640px;
+    padding: 32px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Topic tabs */
+  .topics {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .topic-btn {
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .topic-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200, 241, 53, 0.08);
+  }
+
+  .topic-btn:hover { color: var(--text); border-color: var(--text); }
+
+  /* Progress */
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* Card */
+  .card-wrap {
+    perspective: 1200px;
+  }
+
+  .card {
+    position: relative;
+    min-height: 280px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 32px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .card:hover { box-shadow: 0 8px 40px rgba(0,0,0,0.4); transform: translateY(-2px); }
+  .card:active { transform: translateY(0); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,241,53,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card-topic {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+  }
+
+  .card-scene {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    font-weight: 500;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  .card-hint {
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-hint::before {
+    content: '▶';
+    font-size: 0.6rem;
+    color: var(--accent);
+  }
+
+  /* Answer reveal */
+  .answer-wrap {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .answer-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .chunk-main {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .chunk-example {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    border-left: 2px solid var(--border);
+    padding-left: 12px;
+    margin-top: 12px;
+  }
+
+  .chunk-example em {
+    color: var(--accent2);
+    font-style: normal;
+  }
+
+  /* Action buttons */
+  .actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .btn-ok {
+    background: var(--accent);
+    color: #0e0e0e;
+  }
+
+  .btn-ok:hover { background: #d4f84a; }
+
+  .btn-ng {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ng:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* Result screen */
+  .result-screen {
+    text-align: center;
+    padding: 40px 0;
+    animation: slideUp 0.4s ease;
+  }
+
+  .result-emoji { font-size: 3rem; margin-bottom: 16px; }
+
+  .result-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .result-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
+
+  .result-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 36px;
+  }
+
+  .stat-item { text-align: center; }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+  .btn-restart {
+    padding: 14px 40px;
+    background: var(--accent);
+    color: #0e0e0e;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .btn-restart:hover { background: #d4f84a; transform: translateY(-1px); }
+
+  /* Mastery badge */
+  .mastery-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .mastery-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+
+  .mastery-dot.done { background: var(--accent); }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">CHUNK<span>trainer</span></div>
+  <div class="stats-bar">
+    覚えた <strong id="hdr-done">0</strong> / <span id="hdr-total">0</span>
+  </div>
+</header>
+
+<main>
+  <!-- Topic selector -->
+  <div class="topics" id="topics"></div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-label" id="progress-label">0 / 0</div>
+  </div>
+
+  <!-- Card -->
+  <div class="card-wrap" id="card-wrap">
+    <div class="card" id="card" onclick="revealAnswer()">
+      <div class="card-topic" id="card-topic"></div>
+      <div class="card-scene" id="card-scene"></div>
+      <div class="card-hint">タップして答えを確認</div>
+    </div>
+  </div>
+
+  <!-- Answer -->
+  <div class="answer-wrap hidden" id="answer-wrap">
+    <div class="answer-label">チャンク</div>
+    <div class="chunk-main" id="chunk-main"></div>
+    <div class="chunk-example" id="chunk-example"></div>
+  </div>
+
+  <!-- Mastery dots -->
+  <div class="mastery-row" id="mastery-row"></div>
+
+  <!-- Action buttons -->
+  <div class="actions hidden" id="actions">
+    <button class="btn btn-ng" onclick="markCard(false)">もう一度</button>
+    <button class="btn btn-ok" onclick="markCard(true)">覚えた ✓</button>
+  </div>
+
+  <!-- Result -->
+  <div class="result-screen hidden" id="result-screen">
+    <div class="result-emoji">🎉</div>
+    <div class="result-title">セッション完了！</div>
+    <div class="result-sub">今日の練習お疲れさまでした</div>
+    <div class="result-stats">
+      <div class="stat-item">
+        <div class="stat-num" id="res-ok">0</div>
+        <div class="stat-label">覚えた</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="res-ng">0</div>
+        <div class="stat-label">もう一度</div>
+      </div>
+    </div>
+    <button class="btn-restart" onclick="restartSession()">もう一度練習する</button>
+  </div>
+</main>
+
+<script>
+const CHUNKS = [
+  // 家族
+  {
+    id: 1, topic: '家族',
+    scene: '子供にとって家族と過ごす時間が大切だと伝えたい',
+    chunk: 'I believe it is important for...',
+    example: '<em>I believe it is important for</em> children to spend time with their family.'
+  },
+  {
+    id: 2, topic: '家族',
+    scene: '子育ての難しさについて話したい',
+    chunk: 'It is not easy to...',
+    example: '<em>It is not easy to</em> raise children in today\'s busy society.'
+  },
+  {
+    id: 3, topic: '家族',
+    scene: '最近の傾向・社会の変化について述べたい',
+    chunk: 'In recent years,...',
+    example: '<em>In recent years,</em> more parents are struggling to balance work and family life.'
+  },
+  {
+    id: 4, topic: '家族',
+    scene: '理由を説明したい',
+    chunk: 'This is because...',
+    example: '<em>This is because</em> spending time together strengthens family bonds.'
+  },
+  {
+    id: 5, topic: '家族',
+    scene: 'まとめ・結論を言いたい',
+    chunk: 'For these reasons, I think...',
+    example: '<em>For these reasons, I think</em> family time should be a priority.'
+  },
+
+  // 釣り
+  {
+    id: 6, topic: '釣り',
+    scene: '趣味について相手に話したい',
+    chunk: 'One of my hobbies is...',
+    example: '<em>One of my hobbies is</em> fishing in the rivers near Oita.'
+  },
+  {
+    id: 7, topic: '釣り',
+    scene: '自然・環境の重要性を伝えたい',
+    chunk: 'It is important to protect...',
+    example: '<em>It is important to protect</em> the natural environment for future generations.'
+  },
+  {
+    id: 8, topic: '釣り',
+    scene: '何かが増えている・減っていると言いたい',
+    chunk: 'The number of ... is increasing / decreasing.',
+    example: '<em>The number of</em> people enjoying outdoor activities <em>is increasing.</em>'
+  },
+  {
+    id: 9, topic: '釣り',
+    scene: '〜することでリフレッシュできると言いたい',
+    chunk: '... helps me relax and...',
+    example: 'Fishing <em>helps me relax and</em> clear my mind after work.'
+  },
+  {
+    id: 10, topic: '釣り',
+    scene: '例を挙げたい',
+    chunk: 'For example,...',
+    example: '<em>For example,</em> many people go fishing to reduce stress.'
+  },
+
+  // Web開発
+  {
+    id: 11, topic: 'Web開発',
+    scene: '技術の変化が速いと言いたい',
+    chunk: 'Technology is changing rapidly, and...',
+    example: '<em>Technology is changing rapidly, and</em> developers need to keep learning.'
+  },
+  {
+    id: 12, topic: 'Web開発',
+    scene: '〜することが可能になったと言いたい',
+    chunk: 'It has become possible to...',
+    example: '<em>It has become possible to</em> build websites easily with modern tools.'
+  },
+  {
+    id: 13, topic: 'Web開発',
+    scene: 'メリット・利点を述べたい',
+    chunk: 'One of the advantages of ... is...',
+    example: '<em>One of the advantages of</em> remote work <em>is</em> that you can work from anywhere.'
+  },
+  {
+    id: 14, topic: 'Web開発',
+    scene: '一方で問題点もあると言いたい',
+    chunk: 'On the other hand,...',
+    example: '<em>On the other hand,</em> working alone can sometimes be isolating.'
+  },
+  {
+    id: 15, topic: 'Web開発',
+    scene: '〜に取り組んでいると伝えたい',
+    chunk: 'I am working on...',
+    example: '<em>I am working on</em> a website project in my spare time.'
+  },
+
+  // 旅行
+  {
+    id: 16, topic: '旅行',
+    scene: '旅行が好きな理由を言いたい',
+    chunk: 'Traveling allows me to...',
+    example: '<em>Traveling allows me to</em> experience different cultures and broaden my perspective.'
+  },
+  {
+    id: 17, topic: '旅行',
+    scene: '行ってみたい・行く予定と言いたい',
+    chunk: 'I am planning to...',
+    example: '<em>I am planning to</em> visit Karuizawa with my family this spring.'
+  },
+  {
+    id: 18, topic: '旅行',
+    scene: '〜することをおすすめしたい',
+    chunk: 'I would recommend ... because...',
+    example: '<em>I would recommend</em> visiting local areas <em>because</em> they offer unique experiences.'
+  },
+  {
+    id: 19, topic: '旅行',
+    scene: '経験から学んだことを言いたい',
+    chunk: 'Through this experience, I learned that...',
+    example: '<em>Through this experience, I learned that</em> stepping outside your routine is refreshing.'
+  },
+  {
+    id: 20, topic: '旅行',
+    scene: '〜と比べて違う・似ていると言いたい',
+    chunk: 'Compared to..., ... is more...',
+    example: '<em>Compared to</em> busy cities, rural areas <em>are more</em> peaceful and relaxing.'
+  }
+];
+
+const TOPICS = ['すべて', '家族', '釣り', 'Web開発', '旅行'];
+const STORAGE_KEY = 'chunk_mastery_v1';
+
+let currentTopic = 'すべて';
+let filteredChunks = [];
+let queue = [];
+let currentIndex = 0;
+let mastery = {};
+let sessionOk = 0;
+let sessionNg = 0;
+
+// Load mastery from localStorage
+function loadMastery() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) mastery = JSON.parse(saved);
+  } catch(e) { mastery = {}; }
+}
+
+function saveMastery() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(mastery)); } catch(e) {}
+}
+
+function getFiltered() {
+  if (currentTopic === 'すべて') return [...CHUNKS];
+  return CHUNKS.filter(c => c.topic === currentTopic);
+}
+
+function buildQueue() {
+  filteredChunks = getFiltered();
+  // Not-yet-mastered first, then mastered
+  const notDone = filteredChunks.filter(c => !mastery[c.id]);
+  const done = filteredChunks.filter(c => mastery[c.id]);
+  queue = [...notDone, ...done];
+  currentIndex = 0;
+  sessionOk = 0;
+  sessionNg = 0;
+}
+
+function renderTopics() {
+  const el = document.getElementById('topics');
+  el.innerHTML = TOPICS.map(t => `
+    <button class="topic-btn ${t === currentTopic ? 'active' : ''}" onclick="selectTopic('${t}')">${t}</button>
+  `).join('');
+}
+
+function selectTopic(t) {
+  currentTopic = t;
+  renderTopics();
+  buildQueue();
+  showCard();
+}
+
+function updateProgress() {
+  const total = queue.length;
+  const done = currentIndex;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${done} / ${total}`;
+
+  const totalMastered = Object.values(mastery).filter(Boolean).length;
+  document.getElementById('hdr-done').textContent = totalMastered;
+  document.getElementById('hdr-total').textContent = CHUNKS.length;
+}
+
+function renderMasteryDots() {
+  const row = document.getElementById('mastery-row');
+  row.innerHTML = filteredChunks.map(c =>
+    `<div class="mastery-dot ${mastery[c.id] ? 'done' : ''}"></div>`
+  ).join('');
+}
+
+function showCard() {
+  document.getElementById('result-screen').classList.add('hidden');
+  document.getElementById('card-wrap').classList.remove('hidden');
+  document.getElementById('answer-wrap').classList.add('hidden');
+  document.getElementById('actions').classList.add('hidden');
+
+  if (currentIndex >= queue.length) {
+    showResult();
+    return;
+  }
+
+  const chunk = queue[currentIndex];
+  document.getElementById('card-topic').textContent = chunk.topic;
+  document.getElementById('card-scene').textContent = chunk.scene;
+  document.getElementById('chunk-main').textContent = chunk.chunk;
+  document.getElementById('chunk-example').innerHTML = chunk.example;
+
+  updateProgress();
+  renderMasteryDots();
+}
+
+function revealAnswer() {
+  document.getElementById('answer-wrap').classList.remove('hidden');
+  document.getElementById('actions').classList.remove('hidden');
+}
+
+function markCard(ok) {
+  const chunk = queue[currentIndex];
+  if (ok) {
+    mastery[chunk.id] = true;
+    sessionOk++;
+  } else {
+    mastery[chunk.id] = false;
+    sessionNg++;
+    // Re-add to end of queue for retry
+    queue.push(chunk);
+  }
+  saveMastery();
+  currentIndex++;
+  showCard();
+}
+
+function showResult() {
+  document.getElementById('card-wrap').classList.add('hidden');
+  document.getElementById('answer-wrap').classList.add('hidden');
+  document.getElementById('actions').classList.add('hidden');
+  document.getElementById('result-screen').classList.remove('hidden');
+  document.getElementById('res-ok').textContent = sessionOk;
+  document.getElementById('res-ng').textContent = sessionNg;
+  renderMasteryDots();
+  updateProgress();
+}
+
+function restartSession() {
+  buildQueue();
+  showCard();
+}
+
+// Init
+loadMastery();
+renderTopics();
+buildQueue();
+showCard();
+</script>
+</body>
+</html>
