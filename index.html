@@ -257,7 +257,7 @@ function renderPractice(){
     </div>
     <div class="nav-actions">
       <button class="btn-nav" onclick="prevChunk()" ${state.practiceIndex===0?'disabled':''}>← 前へ</button>
-      <button class="btn-nav primary" onclick="nextChunk()">${state.practiceIndex===total-1?'テストへ →':'次へ →'}</button>
+      <button class="btn-nav primary" onclick="nextChunk()" ${state.revealed?'disabled style="opacity:0.4"':''}>${state.practiceIndex===total-1?'テストへ →':'次へ →'}</button>
     </div>`;
 }
 
@@ -268,8 +268,13 @@ function judge(ok){
   const s=getStats(chunk.id);
   if(ok){s.ok++;s.streak=(s.streak||0)+1;}else{s.ng++;s.streak=0;}
   state.stats[chunk.id]=s;saveState();
-  state.judged=true; // 判定済みフラグ
-  renderPractice();  // 次に進まずそのまま再描画
+  state.revealed=false;
+  if(state.practiceIndex>=UNITS[state.currentUnit].chunks.length-1){
+    switchTab('test');
+  } else {
+    state.practiceIndex++;
+    renderPractice();
+  }
 }
 
 function nextChunk(){
